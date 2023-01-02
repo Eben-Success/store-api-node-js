@@ -1,7 +1,11 @@
 const Product = require('../models/products');
 
 const getAllProductsStatic = async (req, res) => {
-    const products = await Product.find({}).select('name price').limit(4)
+    const products = await Product.find({})
+    .sort('name')
+    .select('name price')
+    .limit(10)
+    .skip(2)
     res.status(200).json({ products, nbHits: products.length })
 }
 
@@ -38,6 +42,13 @@ const getAllProducts = async (req, res) => {
         const fieldsList = fields.split(',').join(' ')
         result = result.select(fieldsList)
     }
+
+    // set page limit or 1 if user doesn't pass the value
+    const page = Number(req.body.page) || 1
+
+    // set limit, if no limit, limit == 10
+    const limit = Number(req.body.limit) || 10
+
 
     const products = await result
     res.status(200).json({ products, nbHits: products.length })
