@@ -49,6 +49,9 @@ const getAllProducts = async (req, res) => {
     // set limit, if no limit, limit == 10
     const limit = Number(req.body.limit) || 10
 
+    // skip 
+    const skip = (page - 1) * limit
+
 
     const products = await result
     res.status(200).json({ products, nbHits: products.length })
